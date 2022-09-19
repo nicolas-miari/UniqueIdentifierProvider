@@ -2,10 +2,24 @@ import XCTest
 @testable import UniqueIdentifierProvider
 
 final class UniqueIdentifierProviderTests: XCTestCase {
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(UniqueIdentifierProvider().text, "Hello, World!")
-    }
+
+  func testUniqueness() throws {
+
+    let provider = UniqueIdentifierProviderFactory.newIdentifierProvider()
+
+    let id1 = try provider.newIdentifier()
+    let id2 = try provider.newIdentifier()
+
+    XCTAssertNotEqual(id1, id2)
+  }
+
+  func testUncheckedUniqueness() throws {
+
+    let provider = UniqueIdentifierProviderFactory.newIdentifierProvider()
+
+    let id1 = provider.newUncheckedIdentifier()
+    let id2 = provider.newUncheckedIdentifier()
+
+    XCTAssertNotEqual(id1, id2)
+  }
 }
