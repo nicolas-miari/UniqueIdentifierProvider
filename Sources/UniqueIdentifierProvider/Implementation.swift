@@ -1,13 +1,13 @@
 import Foundation
 
-public final class UniqueIdentifierProviderImplementation: UniqueIdentifierProvider {
+internal final class UniqueIdentifierProviderImplementation: UniqueIdentifierProvider {
 
   private var database: [String] = []
 
   private var failSafeLimit = 10_000
 
   /// Creates a new identifier.
-  public func newIdentifier() throws -> String {
+  internal func newIdentifier() throws -> String {
 
     // Fail-safe to break out of the (highly unlikely, but) potentially infinite while loop in case
     // an external bug prevents it from exiting.
@@ -31,7 +31,7 @@ public final class UniqueIdentifierProviderImplementation: UniqueIdentifierProvi
     }
   }
 
-  public func newUncheckedIdentifier() -> String {
+  internal func newUncheckedIdentifier() -> String {
     let new = UUID().uuidString
     database.append(new)
     return new
@@ -44,7 +44,7 @@ public final class UniqueIdentifierProviderImplementation: UniqueIdentifierProvi
     self.database = try JSONDecoder().decode([String].self, from: data)
   }
 
-  public func fileWrapper() -> FileWrapper {
+  internal func fileWrapper() -> FileWrapper {
     let data = try? JSONEncoder().encode(database)
     return FileWrapper(regularFileWithContents: data ?? Data())
   }
