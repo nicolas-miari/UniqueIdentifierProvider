@@ -27,6 +27,9 @@ public protocol UniqueIdentifierProvider: Codable {
   /// The new identifier is returned unchecked, but it is added to the internal cache for comparison
   /// during future calls to `newIdentifier()`.
   func newUncheckedIdentifier() -> String
+
+  /// Useful for compairing two instances, even if they're from different concrete types.
+  func contains(_ identifier: String) -> Bool
 }
 
 // MARK: - Supporting Types

@@ -7,10 +7,7 @@ public final class UniqueIdentifierProviderFactory {
   }
 
   public static func loadIdentifierProvider(from file: FileWrapper) throws -> some UniqueIdentifierProvider {
-    guard let data = file.regularFileContents else {
-      throw UniqueIdentifierProviderError.missingInputData
-    }
-    let provider = try JSONDecoder().decode(UniqueIdentifierProviderImplementation.self, from: data)
+    let provider = try UniqueIdentifierProviderImplementation(from: file)
     return provider
   }
 }
