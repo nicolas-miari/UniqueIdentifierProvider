@@ -1,6 +1,7 @@
 import XCTest
 import UniqueIdentifierProvider
 
+@MainActor
 final class UniqueIdentifierProviderTests: XCTestCase {
 
   func testUniqueness() throws {

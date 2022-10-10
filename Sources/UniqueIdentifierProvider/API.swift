@@ -9,7 +9,9 @@ import Foundation
 
 // MARK: - Public Interface
 
-public protocol UniqueIdentifierProvider: Codable {
+/// Defines the interface for an object that provides unique identifiers and optionally manages
+/// potential identifier collisions.
+public protocol UniqueIdentifierProvider: AnyObject {
 
   /// Provides a file wrapper for persisting the provider's identifier cache to disk.
   func fileWrapper() throws -> FileWrapper
@@ -20,15 +22,27 @@ public protocol UniqueIdentifierProvider: Codable {
   /// This should in theory not happen, barring a logic bug in the implementation or its
   /// dependencies (Foundation). If you don't care about uniqueness checks and prefer to call from a
   /// non-throwing context, use `newUncheckedIdentifier()` instead.
+  ///
+  /// Because it writes the new identifier to theinternal cache, this method is isolated to the main
+  /// actor (new identifiers only need to be created in response to user action, i.e., on the UI
+  /// queue/thread).
+  @MainActor
   func newIdentifier() throws -> String
 
   /// Creates an new unique identifier without checking for (extremely unlikely) collisions.
   ///
   /// The new identifier is returned unchecked, but it is added to the internal cache for comparison
   /// during future calls to `newIdentifier()`.
+  ///
+  /// Because it writes the new identifier to theinternal cache, this method is isolated to the main
+  /// actor (new identifiers only need to be created in response to user action, i.e., on the UI
+  /// queue/thread).
+  @MainActor
   func newUncheckedIdentifier() -> String
 
-  /// Useful for compairing two instances, even if they're from different concrete types.
+  /// Returns `true` if the specified identifier is included in the provider's cache.
+  ///
+  /// Useful when compairing two instances, even if they're from different concrete types.
   func contains(_ identifier: String) -> Bool
 }
 
